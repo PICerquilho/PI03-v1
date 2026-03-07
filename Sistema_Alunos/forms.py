@@ -12,8 +12,7 @@ class AlunoForm(forms.ModelForm):
             'nome_social': forms.TextInput(attrs={'class': 'form-control'}),
             'id_aluno': forms.TextInput(attrs={'class': 'form-control'}),
             'contato': forms.TextInput(attrs={'class': 'form-control'}),
-            'rg': forms.TextInput(attrs={'class': 'form-control'}),
-            'cpf': forms.TextInput(attrs={'class': 'form-control'}),
+            'cpf': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '000.000.000-00'}),
             'contato_emergencial': forms.TextInput(attrs={'class': 'form-control'}),
             'responsavel': forms.TextInput(attrs={'class': 'form-control'}),
             'observacoes': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
@@ -43,3 +42,27 @@ class AlunoForm(forms.ModelForm):
             cleaned_data['deficiencia_qual'] = 'Não Informado'
 
         return cleaned_data
+
+    def clean_cpf(self):
+        cpf = self.cleaned_data.get('cpf')
+
+        # Se o CPF estiver vazio, converte para None para não dar erro de duplicidade no banco
+        if not cpf:
+            return None
+
+        # Validação utilizando a lógica otimizada
+        cpf_limpo = ''.join(filter(str.isdigit, cpf))
+
+        if len(cpf_limpo) != 11:
+            raise forms.ValidationError("CPF deve ter 11 dígitos.")
+
+        if cpf_limpo == cpf_limpo[0] * 11:
+            raise forms.ValidationError("CPF inválido.")
+
+        for i in range(9, 11):
+            soma = sum(int(cpf_limpo[num]) * ((i+1) - num) for num in range(i))
+            digito = ((soma * 10) % 11) % 10
+            if int(cpf_limpo[i]) != digito:
+                raise forms.ValidationError("CPF inválido. Verifique a numeração.")
+
+        return cpf # Retorna o CPF original (com máscara) se for válido
