@@ -18,7 +18,9 @@ def remover_acentos(texto):
 @login_required(login_url='login')
 def index(request):
     anos = [f"{i}ª Ano" for i in range(1, 10)]
-    return render(request, 'index.html', {'anos': anos})
+    cidades = Aluno.objects.exclude(cidade__isnull=True).exclude(cidade__exact='').values_list('cidade', flat=True).distinct().order_by('cidade')
+    bairros = Aluno.objects.exclude(bairro__isnull=True).exclude(bairro__exact='').values_list('bairro', flat=True).distinct().order_by('bairro')
+    return render(request, 'index.html', {'anos': anos, 'cidades': cidades, 'bairros': bairros})
 
 @login_required(login_url='login')
 def cadastro(request):
@@ -57,6 +59,8 @@ def buscar_aluno(request):
     serie = request.GET.get('serie', '').strip()
     turma = request.GET.get('turma', '').strip()
     periodo = request.GET.get('periodo', '').strip()
+    cidade = request.GET.get('cidade', '').strip()
+    bairro = request.GET.get('bairro', '').strip()
     filtros = Q()
     if query:
         query_sem_acento = remover_acentos(query).lower()
@@ -71,6 +75,10 @@ def buscar_aluno(request):
         filtros &= Q(turma=turma)
     if periodo:
         filtros &= Q(periodo=periodo)
+    if cidade:
+        filtros &= Q(cidade__icontains=cidade)
+    if bairro:
+        filtros &= Q(bairro__icontains=bairro)
     alunos = Aluno.objects.filter(filtros)
     resultado = [
         {

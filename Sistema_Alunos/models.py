@@ -49,6 +49,14 @@ class Aluno(models.Model):
     contato = models.CharField(max_length=15, blank=True, null=True)
     contato_emergencial = models.CharField(max_length=15, blank=True, null=True)
     responsavel = models.CharField(max_length=100, blank=True, null=True)
+
+    # Campos de endereço
+    cep = models.CharField(max_length=9, blank=True, null=True)
+    endereco = models.CharField(max_length=255, blank=True, null=True)
+    numero = models.CharField(max_length=20, blank=True, null=True)
+    bairro = models.CharField(max_length=100, blank=True, null=True)
+    cidade = models.CharField(max_length=100, blank=True, null=True)
+    uf = models.CharField(max_length=2, blank=True, null=True)
     
     # NOVOS CAMPOS adicionados
     sexo = models.CharField(max_length=2, choices=SEXO_CHOICES, default='NI')

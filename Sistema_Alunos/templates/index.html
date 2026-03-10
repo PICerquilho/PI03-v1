@@ -101,16 +101,17 @@
                         <label for="busca" class="form-label">Buscar por Nome, RA ou RG</label>
                         <input type="text" id="busca" class="form-control" placeholder="Digite para buscar...">
                     </div>
-                    <div class="col-md-4">
+                    <!-- Filtros em linha -->
+                    <div class="col-md-2">
                         <label for="filtroSerie" class="form-label">Ano</label>
                         <select id="filtroSerie" class="form-select">
                             <option value="">Todos os anos</option>
-                            {% for i in "123456789" %}
-                                <option value="{{ i }}ª Ano">{{ i }}ª Ano</option>
+                            {% for ano in anos %}
+                                <option value="{{ ano }}">{{ ano }}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="filtroTurma" class="form-label">Turma</label>
                         <select id="filtroTurma" class="form-select">
                             <option value="">Todas as turmas</option>
@@ -119,7 +120,7 @@
                             <option value="C">Turma C</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="filtroPeriodo" class="form-label">Período</label>
                         <select id="filtroPeriodo" class="form-select">
                             <option value="">Todos os períodos</option>
@@ -128,6 +129,21 @@
                         </select>
                     </div>
                     <div class="col-md-2">
+                        <label for="filtro-cidade" class="form-label">Cidade</label>
+                        <select id="filtro-cidade" class="form-select">
+                            <option value="">Todas</option>
+                            {% for cidade in cidades %}<option value="{{ cidade }}">{{ cidade }}</option>{% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="filtro-bairro" class="form-label">Bairro</label>
+                        <select id="filtro-bairro" class="form-select">
+                            <option value="">Todos</option>
+                            {% for bairro in bairros %}<option value="{{ bairro }}">{{ bairro }}</option>{% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">&nbsp;</label> <!-- Espaço para alinhar o botão -->
                         <button class="btn btn-primary w-100 bg-custom-blue" onclick="buscarAluno()">Buscar</button>
                     </div>
                 </div>
@@ -160,8 +176,10 @@
             const serie = document.getElementById('filtroSerie').value;
             const turma = document.getElementById('filtroTurma').value;
             const periodo = document.getElementById('filtroPeriodo').value;
+            const cidade = document.getElementById('filtro-cidade').value.trim();
+            const bairro = document.getElementById('filtro-bairro').value.trim();
 
-            fetch(`/buscar_aluno/?q=${query}&serie=${serie}&turma=${turma}&periodo=${periodo}`)
+            fetch(`/buscar_aluno/?q=${query}&serie=${serie}&turma=${turma}&periodo=${periodo}&cidade=${cidade}&bairro=${bairro}`)
                 .then(response => response.json())
                 .then(data => {
                     const areaResultados = document.getElementById('areaResultados');
@@ -188,7 +206,7 @@
         }
 
         function limparBusca() {
-            ['busca', 'filtroSerie', 'filtroTurma', 'filtroPeriodo'].forEach(id => document.getElementById(id).value = '');
+            ['busca', 'filtroSerie', 'filtroTurma', 'filtroPeriodo', 'filtro-cidade', 'filtro-bairro'].forEach(id => document.getElementById(id).value = '');
             document.getElementById('areaResultados').style.display = 'none';
         }
     </script>

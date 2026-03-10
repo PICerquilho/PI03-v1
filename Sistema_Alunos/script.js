@@ -1,3 +1,5 @@
+console.log("Arquivo script.js carregado!"); // Log para confirmar carregamento do arquivo
+
 function validarCPF(cpf) {
     cpf = cpf.replace(/\D/g, '');
 
@@ -62,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const cepInput = document.getElementById("id_cep");
     if (cepInput) {
         console.log("Campo CEP encontrado. Adicionando eventos...");
+        let ultimoCep = ""; // Cache simples para evitar consultas repetidas
         
         // Máscara CEP
         cepInput.addEventListener('input', function (e) {
@@ -75,6 +78,19 @@ document.addEventListener('DOMContentLoaded', function() {
         // Evento Blur (Busca API)
         cepInput.addEventListener('blur', function(e) {
             console.log("Evento BLUR disparado no CEP.");
+            
+            const cep = e.target.value.replace(/\D/g, '');
+
+            // 1. Validação do formato e cache (Sugestões 1 e 2)
+            if (!/^[0-9]{8}$/.test(cep)) {
+                console.log("CEP inválido ou incompleto. Nenhuma ação tomada.");
+                return; // Interrompe se o CEP não tiver 8 dígitos
+            }
+            if (cep === ultimoCep) {
+                console.log("CEP já consultado. Usando cache.");
+                return; // Interrompe se o CEP for o mesmo da última consulta
+            }
+            ultimoCep = cep; // Atualiza o cache
             
             const enderecoInput = document.getElementById('id_endereco');
             const bairroInput = document.getElementById('id_bairro');
@@ -93,37 +109,42 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
 
-            const cep = e.target.value.replace(/\D/g, '');
-            
-            if (cep.length === 8) {
-                setFieldsState(true, 'Buscando...');
-                console.log(`Consultando API para o CEP: ${cep}`);
+            setFieldsState(true, 'Buscando...');
+            console.log(`Consultando API para o CEP: ${cep}`);
 
-                fetch(`https://viacep.com.br/ws/${cep}/json/`)
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log("Retorno da API:", data);
-                        if (!data.erro) {
-                            if(enderecoInput) enderecoInput.value = data.logradouro;
-                            if(bairroInput) bairroInput.value = data.bairro;
-                            if(cidadeInput) cidadeInput.value = data.localidade;
-                            if(ufInput) ufInput.value = data.uf;
-                            if(numeroInput) numeroInput.focus();
-                        } else {
-                            fields.forEach(field => { if(field) field.value = ''; });
-                            alert("CEP não encontrado.");
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erro na requisição:', error);
-                        alert("Erro ao buscar CEP.");
-                    })
-                    .finally(() => {
-                        setFieldsState(false);
-                    });
-            } else {
-                console.log("CEP incompleto ou vazio.");
-            }
+            // 2. Timeout da API (Sugestão 3)
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 segundos de timeout
+
+            fetch(`https://viacep.com.br/ws/${cep}/json/`, { signal: controller.signal })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Retorno da API:", data);
+                    if (!data.erro) {
+                        if(enderecoInput) enderecoInput.value = data.logradouro;
+                        if(bairroInput) bairroInput.value = data.bairro;
+                        if(cidadeInput) cidadeInput.value = data.localidade;
+                        if(ufInput) ufInput.value = data.uf;
+                        if(numeroInput) numeroInput.focus();
+                    } else {
+                        fields.forEach(field => { if(field) field.value = ''; });
+                        alert("CEP não encontrado.");
+                    }
+                })
+                .catch(error => {
+                    // 3. Melhor tratamento de erro (Sugestão 5)
+                    if (error.name === 'AbortError') {
+                        alert("A busca pelo CEP demorou muito. Verifique sua conexão e tente novamente.");
+                    } else {
+                        alert("Ocorreu um erro ao buscar o CEP. Tente novamente mais tarde.");
+                    }
+                    console.error('Erro na requisição:', error);
+                    fields.forEach(field => { if(field) field.value = ''; }); // Limpa os campos em caso de erro
+                })
+                .finally(() => {
+                    clearTimeout(timeoutId); // Limpa o timeout
+                    setFieldsState(false); // Reabilita os campos
+                });
         });
     } else {
         console.warn("Campo CEP (id_cep) não encontrado nesta página.");

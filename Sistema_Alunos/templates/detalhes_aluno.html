@@ -167,6 +167,10 @@
             <p><strong>Período:</strong> {{ aluno.periodo }}</p>
             <p><strong>Contato:</strong> {{ aluno.contato }}</p>
             <p><strong>Contato Emergencial:</strong> {{ aluno.contato_emergencial }}</p>
+            <p><strong>CEP:</strong> {{ aluno.cep|default:"Não informado" }}</p>
+            <p><strong>Endereço:</strong> {{ aluno.endereco|default:"Não informado" }}, Nº {{ aluno.numero|default:"S/N" }}</p>
+            <p><strong>Bairro:</strong> {{ aluno.bairro|default:"Não informado" }}</p>
+            <p><strong>Cidade/UF:</strong> {{ aluno.cidade|default:"Não informada" }} - {{ aluno.uf|default:"--" }}</p>
             <div class="acoes-aluno">
                 <a href="{% url 'editar_aluno' aluno.id_aluno %}" class="editar-botao"><i class="fas fa-pencil"></i> Editar</a>
                 <a href="{% url 'excluir_aluno' aluno.id_aluno %}" class="excluir-botao"><i class="fas fa-trash-can"></i><i class="fas fa-exclamation-triangle"></i> Excluir</a>
