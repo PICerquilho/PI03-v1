@@ -10,6 +10,9 @@ from django.contrib.auth.decorators import permission_required
 import unicodedata
 from django.shortcuts import render, get_object_or_404, redirect
 from datetime import date
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
 
 def remover_acentos(texto):
     nfkd = unicodedata.normalize('NFKD', texto)
@@ -111,6 +114,26 @@ def editar_aluno(request, id_aluno):
     else:
         form = AlunoForm(instance=aluno)
     return render(request, 'editar_aluno.html', {'form': form, 'aluno': aluno})
+
+
+# FUNÇÃO GERADORA DE PDF CORRIGIDA
+@login_required(login_url='login')
+def gerar_pdf_aluno(request, id_aluno):
+    aluno = get_object_or_404(Aluno, id_aluno=id_aluno)
+    template_path = 'pdf_aluno.html'
+    context = {'aluno': aluno} # Removido o 'hoje' para evitar erros
+    
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'inline; filename="ficha_{aluno.id_aluno}.pdf"'
+    
+    template = get_template(template_path)
+    html = template.render(context)
+
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    
+    if pisa_status.err:
+       return HttpResponse('Erro ao gerar PDF', status=500)
+    return response
 
 @login_required(login_url='login')
 @permission_required('Sistema_Alunos.delete_aluno', raise_exception=True)

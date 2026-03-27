@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page { size: a4; margin: 1.5cm; }
+        body { font-family: Helvetica, Arial, sans-serif; color: #333; line-height: 1.5; }
+        .header { text-align: center; border-bottom: 2px solid #0044cc; margin-bottom: 20px; padding-bottom: 10px; }
+        .header h1 { color: #0044cc; margin: 0; font-size: 22px; }
+        .header p { margin: 5px 0; font-size: 14px; color: #666; }
+        .section-title { background-color: #f0f0f0; padding: 8px; font-weight: bold; font-size: 16px; border-left: 5px solid #0044cc; margin: 15px 0 10px 0; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+        td { padding: 5px; vertical-align: top; font-size: 12px; }
+        .label { font-weight: bold; color: #555; display: block; text-transform: uppercase; font-size: 10px; }
+        .footer { position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 10px; color: #999; border-top: 1px solid #ddd; padding-top: 5px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>FICHA DE MATRÍCULA - PI3</h1>
+        <p>Sistema de Gestão Escolar - Cerquilho/SP</p>
+    </div>
+
+    <div class="section-title">DADOS DO ALUNO</div>
+    <table>
+        <tr>
+            <td colspan="2"><span class="label">Nome Completo:</span> {{ aluno.nome }}</td>
+            <td><span class="label">ID Aluno:</span> {{ aluno.id_aluno }}</td>
+        </tr>
+        <tr>
+            <td><span class="label">CPF:</span> {{ aluno.cpf }}</td>
+            <td><span class="label">Data de Nascimento:</span> {{ aluno.data_nascimento|date:"d/m/Y" }}</td>
+            <td><span class="label">Sexo:</span> {{ aluno.get_sexo_display }}</td>
+        </tr>
+    </table>
+
+    <div class="section-title">ENDEREÇO E LOCALIZAÇÃO</div>
+    <table>
+        <tr>
+            <td colspan="2"><span class="label">Logradouro:</span> {{ aluno.endereco }}, {{ aluno.numero }}</td>
+            <td><span class="label">CEP:</span> {{ aluno.cep }}</td>
+        </tr>
+        <tr>
+            <td><span class="label">Bairro:</span> {{ aluno.bairro }}</td>
+            <td><span class="label">Cidade:</span> {{ aluno.cidade }}</td>
+            <td><span class="label">Estado:</span> {{ aluno.estado }}</td>
+        </tr>
+    </table>
+
+    <div class="section-title">INFORMAÇÕES ESCOLARES</div>
+    <table>
+        <tr>
+            <td><span class="label">Série:</span> {{ aluno.serie }}</td>
+            <td><span class="label">Turma:</span> {{ aluno.turma }}</td>
+            <td><span class="label">Período:</span> {{ aluno.periodo }}</td>
+        </tr>
+        <tr>
+            <td colspan="3"><span class="label">Deficiência:</span> 
+                {% if aluno.deficiencia == 'S' %} Sim - {{ aluno.deficiencia_qual }} {% else %} Não {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    <div class="footer">
+        Documento gerado pelo Sistema PI3 - UNIVESP
+    </div>
+</body>
+</html>
