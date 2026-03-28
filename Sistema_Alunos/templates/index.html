@@ -81,6 +81,7 @@
                         <li class="nav-item"><a class="nav-link active" href="{% url 'index' %}">🏠 Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">📊 Dashboard</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'cadastro' %}"><i class="fas fa-user-plus"></i> Cadastrar Aluno</a></li>
+                        <li class="nav-item"><a class="nav-link text-success" href="{% url 'exportar_excel' %}"><i class="fas fa-file-excel"></i> Exportar Planilha</a></li>
                     </ul>
                     <form class="d-flex" method="post" action="{% url 'logout' %}">
                         {% csrf_token %}

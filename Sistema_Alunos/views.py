@@ -13,6 +13,8 @@ from datetime import date
 from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
+import openpyxl
+
 
 def remover_acentos(texto):
     nfkd = unicodedata.normalize('NFKD', texto)
@@ -210,3 +212,36 @@ def dashboard(request):
         'tooltip_deficiencia_detalhes': tooltip_deficiencia_detalhes,
     }
     return render(request, 'dashboard.html', context)
+
+@login_required(login_url='login')
+def exportar_alunos_excel(request):
+    # 1. Cria o "Livro" de Excel
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Lista de Alunos PI3"
+
+    # 2. Define o cabeçalho (Primeira linha)
+    colunas = ['Nome', 'ID Aluno', 'CPF', 'Série', 'Turma', 'Cidade', 'Bairro']
+    ws.append(colunas)
+
+    # 3. Busca os dados no banco e joga na planilha
+    alunos = Aluno.objects.all()
+    for aluno in alunos:
+        ws.append([
+            aluno.nome, 
+            aluno.id_aluno, 
+            aluno.cpf, 
+            aluno.serie, 
+            aluno.turma, 
+            aluno.cidade, 
+            aluno.bairro
+        ])
+
+    # 4. Configura a resposta para o navegador baixar o arquivo
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    )
+    response['Content-Disposition'] = 'attachment; filename="relatorio_alunos_pi3.xlsx"'
+    
+    wb.save(response)
+    return response

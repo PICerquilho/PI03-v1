@@ -21,8 +21,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.auth import views as auth_views
-from Sistema_Alunos import views  # ESTA É A ÚNICA IMPORTAÇÃO DE VIEWS QUE VOCÊ PRECISA
+from Sistema_Alunos import views  # <--- Mantemos apenas este!
 
 urlpatterns = [
     # Página principal (Login)
@@ -34,8 +33,8 @@ urlpatterns = [
     path('buscar_aluno/', views.buscar_aluno, name='buscar_aluno'),
     path('login/', views.login_view, name='login'),
     
-    # Logout do Django
-    path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
+    # Logout (Usando a função que você criou no seu views.py)
+    path('logout/', views.logout_view, name='logout'),
     
     # Detalhes e PDF
     path('detalhes_aluno/<str:id_aluno>/', views.detalhes_aluno, name='detalhes_aluno'),
@@ -47,6 +46,9 @@ urlpatterns = [
 
     # Dashboard
     path('dashboard/', views.dashboard, name='dashboard'),
+
+    # Excel
+    path('exportar-excel/', views.exportar_alunos_excel, name='exportar_excel'),
 ]
 
 # Configuração para fotos (mídia)
