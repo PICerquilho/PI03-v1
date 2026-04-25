@@ -166,4 +166,29 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/script.js' %}"></script>
 </body>
+<footer id="footer-acessibilidade" style="position: fixed; bottom: 0; left: 0; width: 100%; background: #0059B3; padding: 10px; z-index: 9999; border-top: 2px solid #007bff; display: flex; gap: 20px;">
+    <button onclick="alterarFonte(2)" style="background: #444; color: white; border: 1px solid #666; border-radius: 5px; padding: 8px 15px; cursor: pointer; font-weight: bold; font-size: 18px;">A +</button>
+    <button onclick="alterarFonte(-2)" style="background: #444; color: white; border: 1px solid #666; border-radius: 5px; padding: 8px 15px; cursor: pointer; font-weight: bold; font-size: 18px;">A -</button>
+</footer>
+
+<script>
+    function alterarFonte(variacao) {
+        // Altera o corpo da página
+        const body = document.body;
+        let estiloAtual = window.getComputedStyle(body).fontSize;
+        let tamanhoNovo = parseFloat(estiloAtual) + variacao;
+
+        if (tamanhoNovo >= 10 && tamanhoNovo <= 28) {
+            body.style.fontSize = tamanhoNovo + "px";
+            
+            // Tenta aumentar botões e inputs também (para o orientador ver que tudo cresce)
+            const elementos = document.querySelectorAll('button, input, .btn, select');
+            elementos.forEach(el => {
+                if (el.closest('#footer-acessibilidade')) return;
+                let estiloEl = window.getComputedStyle(el).fontSize;
+                el.style.fontSize = (parseFloat(estiloEl) + variacao) + "px";
+            });
+        }
+    }
+</script>
 </html>

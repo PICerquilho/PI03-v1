@@ -1,188 +1,173 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes do Aluno</title>
+    <title>Detalhes do Aluno - Sistema Escolar</title>
+    <link rel="shortcut icon" href="{% static 'imagens/brasao.png' %}" type="image/x-icon">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
-        /* Estilos gerais */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
         body {
-            background-color: #f4f4f4;
-            color: #333;
-            text-align: center;
-            padding: 20px;
+            font-family: 'Poppins', sans-serif;
+            background-color: #E0F2F7;
+            padding-bottom: 80px; 
         }
 
-        /* Cabeçalho */
         header {
-            background-color: #0044cc;
+            background-color: #0059B3 !important;
+        }
+
+        .navbar-brand span {
+            font-weight: 600;
             color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
         }
 
-        header h1 {
-            font-size: 24px;
+        .navbar-nav .nav-link {
+            color: #FFFFFF !important;
+            font-weight: 500;
         }
 
-        .header-image img {
-            height: 50px;
-        }
-
-        /* Container principal */
         .detalhes-container {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            margin: auto;
-        }
-
-        /* Foto do aluno */
-        .foto-container {
-            text-align: center;
-            margin-bottom: 20px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            margin: 20px auto;
         }
 
         .foto-aluno {
-            width: 200px;
-            height: 200px;
-            border-radius: 10px;
+            width: 180px;
+            height: 180px;
+            border-radius: 15px;
             object-fit: cover;
-            border: 3px solid #0044cc;
+            border: 4px solid #0059B3;
+            margin-bottom: 20px;
         }
 
-        /* Informações do aluno */
         .informacoes-aluno p {
-            font-size: 18px;
-            margin: 10px 0;
+            font-size: 16px;
+            margin: 8px 0;
             text-align: left;
-            padding: 5px;
-            border-bottom: 1px solid #ddd;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
         }
 
         .informacoes-aluno p strong {
-            color: #0044cc;
+            color: #0059B3;
+            width: 180px;
+            display: inline-block;
         }
 
-        /* Botões de Ação */
-        .acoes-aluno {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-            padding-top: 10px;
-            border-top: 1px solid #ddd;
-        }
-
-        .acoes-aluno a {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: #555;
-            background-color: #eee;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 8px 12px;
-            text-decoration: none;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-
-        .acoes-aluno a:hover {
-            background-color: #ddd;
-        }
-
-        .acoes-aluno a i {
-            margin-right: 5px;
-        }
-
-        .editar-botao i {
-            /* Adicione estilos específicos para o ícone de lápis se necessário */
-        }
-
-        .excluir-botao i {
-            color: #d9534f; /* Vermelho para indicar perigo */
-            /* Adicione estilos específicos para o ícone de delete/aviso se necessário */
-        }
-
-        /* Botão Voltar */
-        .voltar-home {
-            margin-top: 20px;
-        }
-
-        .voltar-home button {
-            background-color: #0044cc;
-            color: white;
-            padding: 10px 20px;
+        .btn-custom-blue {
+            background-color: #0059B3 !important;
+            color: white !important;
             border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
         }
 
-        .voltar-home button:hover {
-            background-color: #003399;
+        .btn-custom-blue:hover {
+            background-color: #004499 !important;
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <header>
-        <h1>Identificação do Aluno</h1>
-        <div class="header-image">
-            <img src="{% static 'imagens/brasao3.png' %}" alt="Imagem do Cabeçalho">
-        </div>
+
+    <header class="shadow-sm p-3 mb-4">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#0059B3;">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
+                    <img src="{% static 'imagens/brasao3.png' %}" alt="Brasão" width="40" class="me-2">
+                    <span>Sistema Escolar</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">🏠 Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">📊 Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'cadastro' %}"><i class="fas fa-user-plus"></i> Cadastrar Aluno</a></li>
+                    </ul>
+                    <form class="d-flex" method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-light">🚪 Logout</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
     </header>
 
-    <div class="detalhes-container">
-        <div class="foto-container">
-            {% if aluno.foto %}
-                <img src="{{ aluno.foto.url }}" alt="Foto do Aluno" class="foto-aluno">
-            {% else %}
-                <p>Nenhuma foto cadastrada.</p>
-            {% endif %}
-        </div>
+    <main class="container">
+        <div class="detalhes-container text-center">
+            <h3 class="mb-4" style="color: #0059B3;">Ficha do Aluno</h3>
+            
+            <div class="foto-container">
+                {% if aluno.foto %}
+                    <img src="{{ aluno.foto.url }}" alt="Foto de {{ aluno.nome }}" class="foto-aluno shadow-sm">
+                {% else %}
+                    <div class="alert alert-secondary">Nenhuma foto cadastrada.</div>
+                {% endif %}
+            </div>
 
-        <div class="informacoes-aluno">
-            <p><strong>Nome:</strong> {{ aluno.nome_social}}</p>
-            <p><strong>RA:</strong> {{ aluno.id_aluno }}</p>
-            <p><strong>CPF:</strong> {{ aluno.cpf }}</p>
-            <p><strong>Série:</strong> {{ aluno.serie }}</p>
-            <p><strong>Período:</strong> {{ aluno.periodo }}</p>
-            <p><strong>Contato:</strong> {{ aluno.contato }}</p>
-            <p><strong>Contato Emergencial:</strong> {{ aluno.contato_emergencial }}</p>
-            <p><strong>CEP:</strong> {{ aluno.cep|default:"Não informado" }}</p>
-            <p><strong>Endereço:</strong> {{ aluno.endereco|default:"Não informado" }}, Nº {{ aluno.numero|default:"S/N" }}</p>
-            <p><strong>Bairro:</strong> {{ aluno.bairro|default:"Não informado" }}</p>
-            <p><strong>Cidade/UF:</strong> {{ aluno.cidade|default:"Não informada" }} - {{ aluno.uf|default:"--" }}</p>
-            <div class="acoes-aluno">
-                <a href="{% url 'editar_aluno' aluno.id_aluno %}" class="editar-botao"><i class="fas fa-pencil"></i> Editar</a>
-                <a href="{% url 'excluir_aluno' aluno.id_aluno %}" class="excluir-botao"><i class="fas fa-trash-can"></i><i class="fas fa-exclamation-triangle"></i> Excluir</a>
+            <div class="informacoes-aluno">
+                <p><strong>Nome:</strong> {{ aluno.nome }}</p>
+                <p><strong>RA:</strong> {{ aluno.id_aluno }}</p>
+                <p><strong>CPF:</strong> {{ aluno.cpf }}</p>
+                <p><strong>Série:</strong> {{ aluno.serie }}</p>
+                <p><strong>Período:</strong> {{ aluno.periodo }}</p>
+                <p><strong>Contato:</strong> {{ aluno.contato }}</p>
+                <p><strong>Bairro:</strong> {{ aluno.bairro|default:"Não informado" }}</p>
+                <p><strong>Cidade/UF:</strong> {{ aluno.cidade|default:"Cerquilho" }} - {{ aluno.uf|default:"SP" }}</p>
+            </div>
+
+            <div class="d-flex justify-content-center gap-2 mt-4 flex-wrap">
+                <a href="{% url 'editar_aluno' aluno.id_aluno %}" class="btn btn-warning">
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+
+                <a href="{% url 'excluir_aluno' aluno.id_aluno %}" class="btn btn-outline-danger" 
+                   onclick="return confirm('ATENÇÃO: Deseja realmente excluir o cadastro de {{ aluno.nome }}? Esta ação não pode ser desfeita.')">
+                    <i class="fas fa-trash-alt"></i> Excluir
+                </a>
+
                 <a href="{% url 'gerar_pdf_aluno' aluno.id_aluno %}" class="btn btn-danger" target="_blank">
-                    <i class="fas fa-file-pdf"></i> Gerar Ficha PDF
+                    <i class="fas fa-file-pdf"></i> Gerar PDF
+                </a>
+
+                <a href="{% url 'index' %}" class="btn btn-custom-blue">
+                    <i class="fas fa-arrow-left"></i> Voltar à Home
                 </a>
             </div>
         </div>
-    </div>
+    </main>
 
-    <div class="voltar-home">
-        <a href="{% url 'index' %}"><button>Voltar para a Home</button></a>
-    </div>
+    <footer id="footer-acessibilidade" style="position: fixed; bottom: 0; left: 0; width: 100%; background: #0059B3; padding: 10px; z-index: 9999; border-top: 2px solid #007bff; display: flex; gap: 20px;">
+        <button onclick="alterarFonte(2)" style="background: #444; color: white; border: 1px solid #666; border-radius: 5px; padding: 8px 15px; cursor: pointer; font-weight: bold; font-size: 18px;">A +</button>
+        <button onclick="alterarFonte(-2)" style="background: #444; color: white; border: 1px solid #666; border-radius: 5px; padding: 8px 15px; cursor: pointer; font-weight: bold; font-size: 18px;">A -</button>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function alterarFonte(variacao) {
+            const body = document.body;
+            let estiloAtual = window.getComputedStyle(body).fontSize;
+            let tamanhoNovo = parseFloat(estiloAtual) + variacao;
+
+            if (tamanhoNovo >= 10 && tamanhoNovo <= 28) {
+                body.style.fontSize = tamanhoNovo + "px";
+                const elementos = document.querySelectorAll('button, input, .btn, select, p, strong');
+                elementos.forEach(el => {
+                    if (el.closest('#footer-acessibilidade')) return;
+                    let estiloEl = window.getComputedStyle(el).fontSize;
+                    el.style.fontSize = (parseFloat(estiloEl) + variacao) + "px";
+                });
+            }
+        }
+    </script>
 </body>
 </html>

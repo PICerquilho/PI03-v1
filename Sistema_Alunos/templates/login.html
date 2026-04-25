@@ -7,6 +7,7 @@
     <title>Login - Sistema de Alunos</title>
     <link rel="shortcut icon" href="{% static 'imagens/brasao.png' %}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
 
     <style>
         /* ======== Reset e fontes ======== */
@@ -163,4 +164,29 @@
     </div>
 
 </body>
+<footer id="footer-acessibilidade" style="position: fixed; bottom: 0; left: 0; width: 100%; background: #0059B3; padding: 10px; z-index: 9999; border-top: 2px solid #007bff; display: flex; gap: 20px;">
+    <button onclick="alterarFonte(2)" style="background: #444; color: white; border: 1px solid #666; border-radius: 5px; padding: 8px 15px; cursor: pointer; font-weight: bold; font-size: 18px;">A +</button>
+    <button onclick="alterarFonte(-2)" style="background: #444; color: white; border: 1px solid #666; border-radius: 5px; padding: 8px 15px; cursor: pointer; font-weight: bold; font-size: 18px;">A -</button>
+</footer>
+
+<script>
+    function alterarFonte(variacao) {
+        // Altera o corpo da página
+        const body = document.body;
+        let estiloAtual = window.getComputedStyle(body).fontSize;
+        let tamanhoNovo = parseFloat(estiloAtual) + variacao;
+
+        if (tamanhoNovo >= 10 && tamanhoNovo <= 28) {
+            body.style.fontSize = tamanhoNovo + "px";
+            
+            // Tenta aumentar botões e inputs também (para o orientador ver que tudo cresce)
+            const elementos = document.querySelectorAll('button, input, .btn, select');
+            elementos.forEach(el => {
+                if (el.closest('#footer-acessibilidade')) return;
+                let estiloEl = window.getComputedStyle(el).fontSize;
+                el.style.fontSize = (parseFloat(estiloEl) + variacao) + "px";
+            });
+        }
+    }
+</script>
 </html>
